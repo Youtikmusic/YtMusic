@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundScape - Visualizer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">SoundScape</a></h1>
+        <nav>
+            <ul>
+                <li><a href="music-player.html">Music Player</a></li>
+                <li><a href="playlists.html">Playlists</a></li>
+                <li><a href="visualizer.html">Visualizer</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Music Visualizer</h2>
+        <canvas id="visualizer"></canvas>
+        <div class="controls">
+            <button id="load-button">Load Music</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 SoundScape. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioContext.createAnalyser();
+        const canvas = document.getElementById('visualizer');
+        const ctx = canvas.getContext('2d');
+        let source;
+        let audioPlayer;
+
+        document.getElementById('load-button').addEventListener('click', loadMusic);
+
+        function loadMusic() {
+            // Create a new audio element
+            audioPlayer = new Audio('Bagawat.mp3'); // Replace with your audio file
+            audioPlayer.crossOrigin = "anonymous"; // Allow CORS if needed
+
+            audioPlayer.addEventListener('canplaythrough', function () {
+                // Connect the audio source to the analyser
+                source = audioContext.createMediaElementSource(audioPlayer);
+                source.connect(analyser);
+                analyser.connect(audioContext.destination);
+                startVisualizer();
+                audioPlayer.play();
+            });
+
+            audioPlayer.addEventListener('ended', function() {
+                audioPlayer.currentTime = 0;
+                audioPlayer.play();
+            });
+        }
+
+        function startVisualizer() {
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            const draw = () => {
+                requestAnimationFrame(draw);
+                analyser.getByteFrequencyData(dataArray);
+
+                ctx.fillStyle = 'rgba(30, 30, 30, 0.9)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const barWidth = (canvas.width / bufferLength) * 2.5;
+                let barHeight;
+                let x = 0;
+
+                for (let i = 0; i < bufferLength; i++) {
+                    barHeight = dataArray[i] / 2;
+
+                    ctx.fillStyle = `rgb(${barHeight + 100}, 50, 50)`;
+                    ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight);
+                    x += barWidth + 1;
+                }
+            };
+            draw();
+        }
+    </script>
+</body>
+</html>

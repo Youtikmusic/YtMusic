@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundScape - Music Player</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">SoundScape</a></h1>
+        <nav>
+            <ul>
+                <li><a href="music-player.html">Music Player</a></li>
+                <li><a href="playlists.html">Playlists</a></li>
+                <li><a href="visualizer.html">Visualizer</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="music-player">
+            <h2>Now Playing: <span id="song-title"></span></h2>
+            <div class="album-art">
+                <img id="album-art" src="" alt="Album Art">
+            </div>
+            <p>Artist: <span id="artist-name"></span></p>
+            <audio id="audio-player" controls>
+                <source id="audio-source" src="" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <div class="music-list">
+                <button onclick="playSong('Bagawat')">Bagawat</button>
+                <button onclick="playSong('DELULU DANCE')">DELULU DANCE</button>
+                <button onclick="playSong('Long Time No See')">Long Time No See</button>
+                <button onclick="playSong('Cold Hours')">Cold Hours</button>
+                <button onclick="playSong('ChannaVe')">ChannaVe</button>
+                <button onclick="playSong('Regret')">Regret</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 SoundScape. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const songs = [
+            { title: "Bagawat", file: "Bagawat.mp3", artist: "Artist Name", artwork: "Bagawat.jpeg" },
+            { title: "DELULU DANCE", file: "DELULU DANCE.mp3", artist: "Artist Name", artwork: "DELULU DANCE.jpeg" },
+            { title: "Long Time No See", file: "Long time no see.mp3", artist: "Artist Name", artwork: "Long time no see.jpeg" },
+            { title: "Cold Hours", file: "Cold hours.mp3", artist: "Artist Name", artwork: "Cold hours.jpeg" },
+            { title: "ChannaVe", file: "ChannaVe.mp3", artist: "Artist Name", artwork: "ChannaVe.jpeg" },
+            { title: "Regret", file: "regret.mp3", artist: "Artist Name", artwork: "regret.jpeg" }
+        ];
+
+        function playSong(songTitle) {
+            const song = songs.find(s => s.title === songTitle);
+            if (song) {
+                document.getElementById("audio-source").src = song.file;
+                document.getElementById("song-title").textContent = song.title;
+                document.getElementById("artist-name").textContent = song.artist;
+                document.getElementById("album-art").src = song.artwork;
+
+                const audioPlayer = document.getElementById("audio-player");
+                audioPlayer.load();
+                audioPlayer.play();
+            }
+        }
+
+        window.onload = () => {
+            if (songs.length > 0) {
+                playSong(songs[0].title);
