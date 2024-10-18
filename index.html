@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundScape</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        header {
+            background-color: #1f1f1f;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #6200ea;
+        }
+
+        .suggestions {
+            margin-top: 80px;
+            /* Space for the fixed header */
+            text-align: center;
+        }
+
+        .suggestions h2 {
+            margin-bottom: 20px;
+        }
+
+        .music-player {
+            margin-top: 20px;
+            text-align: center;
+            background-color: #1f1f1f;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .album-art img {
+            width: 200px;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #1f1f1f;
+            margin-top: auto;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>SoundScape</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="playlists.html">Playlists</a></li>
+                <li><a href="visualizer.html">Visualizer</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="suggestions">
+            <h2>Now Playing: <span id="song-title"></span></h2>
+            <div class="music-player">
+                <div class="album-art">
+                    <img id="album-art" src="" alt="Album Art">
+                </div>
+                <audio id="audio-player" controls>
+                    <source id="audio-source" src="" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 SoundScape. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Array of songs and their corresponding album art
+        const songs = [
+            { title: "Bagawat", file: "Bagawat.mp3", art: "Bagawat.jpeg" },
+            { title: "DELULU DANCE", file: "DELULU DANCE.mp3", art: "DELULUDANCE.jpeg" },
+            { title: "Long Time No See", file: "Long time no see.mp3", art: "LongTimeNoSee.jpeg" }
+        ];
+
+        // Function to select a random song
+        function loadRandomSong() {
+            const randomIndex = Math.floor(Math.random() * songs.length);
+            const selectedSong = songs[randomIndex];
+
+            // Update the audio source, title, and album art
+            document.getElementById("audio-source").src = selectedSong.file;
+            document.getElementById("song-title").textContent = selectedSong.title;
+            document.getElementById("album-art").src = selectedSong.art;
+
+            // Load the new audio
+            const audioPlayer = document.getElementById("audio-player");
+            audioPlayer.load();
+            audioPlayer.play();
+        }
+
+        // Load a random song on page load
+        window.onload = loadRandomSong;
+    </script>
+</body>
+
+</html>
